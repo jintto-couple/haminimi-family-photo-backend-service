@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+[Client]
+
+[Cloud Front]
+
+package "Backend Service" {
+  [Photo Service]
+  [Auth Service]
+  [DB]
+}
+
+[Client] --> [Photo Service]
+[Photo Service] --> [Cloud Front]
+[Photo Service] --> [DB]
+[Client] --> [Cloud Front]
+
+@enduml
