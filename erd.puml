@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+entity FileContent {
+* id : string
+* url : string
+name : string
+desc : string
+--
+* createAt : string
+* createBy : string
+}
+
+@enduml

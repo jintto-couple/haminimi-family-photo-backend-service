@@ -1,4 +1,4 @@
-package com.haminimi.photo.config;
+package com.haminime.photo.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

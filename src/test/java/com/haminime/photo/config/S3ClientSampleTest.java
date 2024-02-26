@@ -1,4 +1,4 @@
-package com.haminimi.photo.config;
+package com.haminime.photo.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
