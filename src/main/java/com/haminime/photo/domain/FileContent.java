@@ -15,6 +15,7 @@ import java.util.UUID;
 public class FileContent {
     private String id;
     private String key;
+    private String uploadId;
     private String url;
     private String name;
     private String desc;
@@ -23,19 +24,22 @@ public class FileContent {
     private String createdBy;
     private String updatedAt;
 
-    public static FileContent createInstance(String key, String name, String desc, String createdBy) {
+    public static FileContent createInstance(String key, String uploadId, String name, String desc, String createdBy) {
         return FileContent.builder().id(UUID.randomUUID().toString())
                 .key(key)
+                .uploadId(uploadId)
                 .name(name)
                 .desc(desc)
+                .status(UploadStatus.INIT)
                 .createdBy(createdBy)
                 .createdAt(LocalDateTime.now().toString())
                 .updatedAt(LocalDateTime.now().toString())
                 .build();
     }
 
-    public void upload() {
+    public void complete(String url) {
         setStatus(UploadStatus.UPLOADED);
+        setUrl(url);
         setUpdatedAt(LocalDateTime.now().toString());
     }
 
