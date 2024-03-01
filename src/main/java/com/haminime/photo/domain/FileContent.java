@@ -2,21 +2,26 @@ package com.haminime.photo.domain;
 
 
 import com.haminime.photo.enumeration.UploadStatus;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-@Setter
+@Setter(AccessLevel.PRIVATE)
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class FileContent {
+
+    @Id
     private String id;
-    private String key;
+    private String originName;
     private String uploadId;
-    private String url;
+    private String path;
     private String name;
     private String desc;
     private UploadStatus status;
@@ -26,7 +31,7 @@ public class FileContent {
 
     public static FileContent createInstance(String key, String uploadId, String name, String desc, String createdBy) {
         return FileContent.builder().id(UUID.randomUUID().toString())
-                .key(key)
+                .originName(key)
                 .uploadId(uploadId)
                 .name(name)
                 .desc(desc)
@@ -39,7 +44,7 @@ public class FileContent {
 
     public void complete(String url) {
         setStatus(UploadStatus.UPLOADED);
-        setUrl(url);
+        setPath(url);
         setUpdatedAt(LocalDateTime.now().toString());
     }
 

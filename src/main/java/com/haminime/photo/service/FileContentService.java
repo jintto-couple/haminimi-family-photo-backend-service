@@ -36,7 +36,7 @@ public class FileContentService {
         //fileContentRepository.save(fileContent);
 
         return StartUpload.builder()
-                .key(fileContent.getKey())
+                .key(fileContent.getOriginName())
                 .uploadId(fileContent.getUploadId()).build();
     }
 

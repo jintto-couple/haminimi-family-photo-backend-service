@@ -1,6 +1,5 @@
 package com.haminime.photo.service;
 
-import com.haminime.photo.domain.FileContent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
@@ -19,7 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MultipartUploadService {
 
-    static final S3Client s3Client = S3Client.create();
+    private final S3Client s3Client;
+
     private static String BUCKET_NAME = "haminimi-photo";
 
     private static String REGION = "";
