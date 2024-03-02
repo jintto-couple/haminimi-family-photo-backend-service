@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class StartUpload {
-
-    private String uploadId;
-
-    private String key;
+public class RequestPresignedUrl {
+    private String url;
 }

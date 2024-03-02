@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Builder
-public class StartUpload {
-
+public class CompleteUpload {
+    private String fileContentId;
     private String uploadId;
-
-    private String key;
 }

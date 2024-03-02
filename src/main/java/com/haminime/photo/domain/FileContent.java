@@ -22,7 +22,7 @@ public class FileContent {
     private String remoteKey;
     private String remotePath;
     private String uploadId;
-    private String desc;
+    private String description;
     private UploadStatus status;
     private String createdAt;
     private String createdBy;
@@ -32,7 +32,7 @@ public class FileContent {
         return FileContent.builder().id(UUID.randomUUID().toString())
                 .remoteKey(key)
                 .uploadId(uploadId)
-                .desc(desc)
+                .description(desc)
                 .status(UploadStatus.INIT)
                 .createdBy(createdBy)
                 .createdAt(LocalDateTime.now().toString())

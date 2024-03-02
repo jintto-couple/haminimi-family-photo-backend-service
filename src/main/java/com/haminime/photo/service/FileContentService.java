@@ -1,17 +1,19 @@
 package com.haminime.photo.service;
 
 import com.haminime.photo.domain.FileContent;
+import com.haminime.photo.repository.FileContentRepository;
+import com.haminime.photo.service.dto.CompleteUpload;
+import com.haminime.photo.service.dto.RequestPresignedUrl;
 import com.haminime.photo.service.dto.StartUpload;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadResponse;
 import software.amazon.awssdk.services.s3.model.CompletedPart;
 import software.amazon.awssdk.services.s3.model.CreateMultipartUploadResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,21 +21,25 @@ public class FileContentService {
 
     private final MultipartUploadService multipartUploadService;
 
-    public void getByPage(int page) {
+    private final FileContentRepository fileContentRepository;
 
+    public Page<FileContent> getAllByPage(Pageable pageable) {
+        return fileContentRepository.findAll(pageable);
     }
 
-    public StartUpload startUpload(String name, String desc, String userId) {
+    public FileContent getById(String id) {
+        return fileContentRepository.findById(id).orElseGet(() -> null);
+    }
+
+    public StartUpload startUpload(String description, String userId) {
         //Key생성 룰
         String key = new StringBuffer(userId)
-                .append("-")
-                .append(name)
                 .append("-")
                 .append(UUID.randomUUID().toString()).toString();
 
         CreateMultipartUploadResponse createResponse = multipartUploadService.createMultipartUpload(key);
+        FileContent fileContent = FileContent.createInstance(key, createResponse.uploadId(), description, userId);
 
-        FileContent fileContent = FileContent.createInstance(key, createResponse.uploadId(), desc, userId);
         //fileContentRepository.save(fileContent);
 
         return StartUpload.builder()
@@ -41,11 +47,14 @@ public class FileContentService {
                 .uploadId(fileContent.getUploadId()).build();
     }
 
-    public String requestPresignedUrl(String key, String uploadId, int partNumber) {
-        return multipartUploadService.partUrlRequest(key, uploadId, partNumber).toString();
+    public RequestPresignedUrl requestPresignedUrl(String key, String uploadId, int partNumber) {
+        String partUrl = multipartUploadService.partUrlRequest(key, uploadId, partNumber).toString();
+
+        return RequestPresignedUrl.builder()
+                .url(partUrl).build();
     }
 
-    public void completeUpload(String key, String uploadId, Map<Integer, String> parts) {
+    public CompleteUpload completeUpload(String key, String uploadId, Map<Integer, String> parts) {
         List<CompletedPart> completedParts = new ArrayList<>();
         for (Integer part : parts.keySet()) {
             String eTag = parts.get(key);
@@ -54,18 +63,29 @@ public class FileContentService {
 
         CompleteMultipartUploadResponse completeResponse = multipartUploadService.completeMultipartUpload(key, uploadId, completedParts);
 
-        //FileContent fileContent = fileContentRepository.findByKeyAndUploadId(key,uploadId);
-        //fileContent.complete(completeResponse.location());
-        //fileContentRepository.save(fileContent);
+        FileContent fileContent = fileContentRepository.findByRemoteKeyAndUploadId(key, uploadId);
+        fileContent.complete(completeResponse.location());
+        FileContent persistFileContent = fileContentRepository.save(fileContent);
+
+        return CompleteUpload.builder()
+                .fileContentId(persistFileContent.getId())
+                .uploadId(persistFileContent.getUploadId()).build();
     }
 
+    public void delete(String id) {
+        Optional<FileContent> fileContent = fileContentRepository.findById(id);
+        if (fileContent.isPresent()) {
+            fileContent.get().delete();
+            fileContentRepository.save(fileContent.get());
+        }
+    }
 
-    public void deleteUpload(String key, String uploadId) {
+    public void cancelUpload(String key, String uploadId) {
+
+        FileContent fileContent = fileContentRepository.findByRemoteKeyAndUploadId(key, uploadId);
+        fileContent.delete();
+        fileContentRepository.save(fileContent);
 
         multipartUploadService.abortMultipartUpload(key, uploadId);
-
-        //FileContent fileContent = fileContentRepository.findByKeyAndUploadId(key,uploadId);
-        //fileContent.delete();
-        //fileContentRepository.save(fileContent);
     }
 }
