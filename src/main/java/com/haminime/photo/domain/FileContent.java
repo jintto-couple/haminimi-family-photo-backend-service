@@ -19,21 +19,19 @@ public class FileContent {
 
     @Id
     private String id;
-    private String originName;
+    private String remoteKey;
+    private String remotePath;
     private String uploadId;
-    private String path;
-    private String name;
     private String desc;
     private UploadStatus status;
     private String createdAt;
     private String createdBy;
     private String updatedAt;
 
-    public static FileContent createInstance(String key, String uploadId, String name, String desc, String createdBy) {
+    public static FileContent createInstance(String key, String uploadId, String desc, String createdBy) {
         return FileContent.builder().id(UUID.randomUUID().toString())
-                .originName(key)
+                .remoteKey(key)
                 .uploadId(uploadId)
-                .name(name)
                 .desc(desc)
                 .status(UploadStatus.INIT)
                 .createdBy(createdBy)
@@ -44,7 +42,7 @@ public class FileContent {
 
     public void complete(String url) {
         setStatus(UploadStatus.UPLOADED);
-        setPath(url);
+        setRemotePath(url);
         setUpdatedAt(LocalDateTime.now().toString());
     }
 

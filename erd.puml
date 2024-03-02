@@ -3,12 +3,16 @@
 
 entity FileContent {
 * id : string
-* url : string
-name : string
+* remoteKey : string
+* uploadId : string
+remotePath : string
 desc : string
+status : int
+
 --
 * createAt : string
 * createBy : string
+* updatedAt : string
 }
 
 @enduml

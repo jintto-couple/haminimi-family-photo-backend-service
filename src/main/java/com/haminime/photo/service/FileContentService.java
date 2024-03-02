@@ -22,21 +22,22 @@ public class FileContentService {
     public void getByPage(int page) {
 
     }
+
     public StartUpload startUpload(String name, String desc, String userId) {
         //Key생성 룰
         String key = new StringBuffer(userId)
-                                .append("-")
-                                .append(name)
-                                .append("-")
-                                .append(UUID.randomUUID().toString()).toString();
+                .append("-")
+                .append(name)
+                .append("-")
+                .append(UUID.randomUUID().toString()).toString();
 
         CreateMultipartUploadResponse createResponse = multipartUploadService.createMultipartUpload(key);
 
-        FileContent fileContent = FileContent.createInstance(key, createResponse.uploadId(), name, desc, userId);
+        FileContent fileContent = FileContent.createInstance(key, createResponse.uploadId(), desc, userId);
         //fileContentRepository.save(fileContent);
 
         return StartUpload.builder()
-                .key(fileContent.getOriginName())
+                .key(fileContent.getRemoteKey())
                 .uploadId(fileContent.getUploadId()).build();
     }
 
