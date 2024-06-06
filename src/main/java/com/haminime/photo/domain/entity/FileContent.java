@@ -1,4 +1,4 @@
-package com.haminime.photo.domain;
+package com.haminime.photo.domain.entity;
 
 
 import com.haminime.photo.enumeration.UploadStatus;

@@ -1,4 +1,4 @@
-package com.haminime.photo.controller.response;
+package com.haminime.photo.controller.dto.response;
 
 import com.haminime.photo.enumeration.UploadStatus;
 import jakarta.persistence.Id;

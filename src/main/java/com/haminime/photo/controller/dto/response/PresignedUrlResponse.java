@@ -1,4 +1,4 @@
-package com.haminime.photo.controller.response;
+package com.haminime.photo.controller.dto.response;
 
 import lombok.Getter;
 

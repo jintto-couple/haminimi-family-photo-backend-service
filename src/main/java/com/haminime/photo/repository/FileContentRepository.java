@@ -1,6 +1,6 @@
 package com.haminime.photo.repository;
 
-import com.haminime.photo.domain.FileContent;
+import com.haminime.photo.domain.entity.FileContent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FileContentRepository extends JpaRepository<FileContent, String> {

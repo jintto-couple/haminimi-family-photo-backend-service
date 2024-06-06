@@ -2,17 +2,17 @@
 'https://plantuml.com/component-diagram
 
 entity FileContent {
-* id : string
-* remoteKey : string
-* uploadId : string
-remotePath : string
-desc : string
-status : int
+    * id : string
+    * remoteKey : string
+    * uploadId : string
+    remotePath : string
+    description : string
+    status : int
 
---
-* createAt : string
-* createBy : string
-* updatedAt : string
+    --
+    * createAt : string
+    * createBy : string
+    * updatedAt : string
 }
 
 @enduml

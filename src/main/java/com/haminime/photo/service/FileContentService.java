@@ -1,6 +1,6 @@
 package com.haminime.photo.service;
 
-import com.haminime.photo.domain.FileContent;
+import com.haminime.photo.domain.entity.FileContent;
 import com.haminime.photo.repository.FileContentRepository;
 import com.haminime.photo.service.dto.CompleteUpload;
 import com.haminime.photo.service.dto.RequestPresignedUrl;

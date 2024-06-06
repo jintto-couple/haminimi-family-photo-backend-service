@@ -1,12 +1,12 @@
 package com.haminime.photo.controller;
 
-import com.haminime.photo.controller.request.CompleteUploadRequest;
-import com.haminime.photo.controller.request.PresignedUrlRequest;
-import com.haminime.photo.controller.request.StartUploadRequest;
-import com.haminime.photo.controller.response.CompleteUploadResponse;
-import com.haminime.photo.controller.response.FileContentResponse;
-import com.haminime.photo.controller.response.PresignedUrlResponse;
-import com.haminime.photo.controller.response.StartUploadResponse;
+import com.haminime.photo.controller.dto.request.CompleteUploadRequest;
+import com.haminime.photo.controller.dto.request.PresignedUrlRequest;
+import com.haminime.photo.controller.dto.request.StartUploadRequest;
+import com.haminime.photo.controller.dto.response.CompleteUploadResponse;
+import com.haminime.photo.controller.dto.response.FileContentResponse;
+import com.haminime.photo.controller.dto.response.PresignedUrlResponse;
+import com.haminime.photo.controller.dto.response.StartUploadResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
