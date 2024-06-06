@@ -40,6 +40,7 @@ public class FileContent {
                 .build();
     }
 
+
     public void complete(String url) {
         setStatus(UploadStatus.UPLOADED);
         setRemotePath(url);
