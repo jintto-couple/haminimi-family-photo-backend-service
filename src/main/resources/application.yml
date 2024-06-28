@@ -25,3 +25,6 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
         show_sql: true
+  kakao:
+    restapiKey: ${HAMINIMI_KAKAO_KEY}
+    redirectUrl: http://localhost:8080/oauth/callback
