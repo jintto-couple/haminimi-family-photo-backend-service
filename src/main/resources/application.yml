@@ -27,4 +27,4 @@ spring:
         show_sql: true
   kakao:
     restapiKey: ${HAMINIMI_KAKAO_KEY}
-    redirectUrl: http://localhost:8080/oauth/callback
+    redirectUrl: http://localhost:8080/oauth2/callback/kakao

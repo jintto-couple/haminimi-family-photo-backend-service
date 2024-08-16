@@ -1,5 +1,8 @@
 package com.haminime.photo.controller.dto.response;
 
- public record AccessTokenResponse {
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public class AccessTokenResponse {
     private final String token;
 }

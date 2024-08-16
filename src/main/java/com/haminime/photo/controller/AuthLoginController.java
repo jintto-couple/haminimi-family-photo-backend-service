@@ -1,6 +1,7 @@
 package com.haminime.photo.controller;
 
 import com.haminime.photo.common.CommonException;
+import com.haminime.photo.controller.dto.response.AccessTokenResponse;
 import com.haminime.photo.controller.dto.response.KakaoTokenInfoResponse;
 import com.haminime.photo.domain.entity.User;
 import com.haminime.photo.service.AuthKakaoService;
@@ -16,22 +17,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RestController("auth/kakao")
-public class KakaoLoginController {
+@RestController("/oauth2/login")
+public class AuthLoginController {
     private final AuthKakaoService authKakaoService;
     private final AuthUserService authUserService;
     private final JwtUtil jwtUtil;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> auth(String code) {
-        KakaoTokenInfoResponse kakaoTokenInfoResponse = authKakaoService.getInfo(code);
-        if(kakaoTokenInfoResponse != null) {
-            User loginUser = authUserService.login(1, kakaoTokenInfoResponse.getId());
-            Map<String, Object> tokenData = new HashMap<>();
-            tokenData.put("userNo", loginUser.getUserNo);
-            String token = jwtUtil.createToken(tokenData);
-            return new ResponseEntity<>(token, HttpStatus.OK);
-        }
-        throw new CommonException();
+    @PostMapping("/kakao")
+    public ResponseEntity<?> kakaoAuth(String code) {
+        return null;
+    }
+
+    @PostMapping("/reissue")
+    public AccessTokenResponse reissue(String refreshToken) {
+        return null;
     }
 }
