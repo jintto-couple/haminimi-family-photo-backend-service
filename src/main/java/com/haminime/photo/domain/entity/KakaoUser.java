@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
 public class KakaoUser extends PlatformUser {
 
     @Id
-    private String kakaoId;
-    private String registDate;
+    private long kakaoId;
+    private long userId;
 
-    public static KakaoUser createInstance(String id, int userNo) {
-        return KakaoUser.builder().kakaoId(id).userNo(userNo).registDate(LocalDateTime.now().toString()).build();
+    public static KakaoUser createInstance(long id, long userId) {
+        return KakaoUser.builder().kakaoId(id).userId(userId).build();
     }
 
 }

@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import feign.Client;
 
 @Configuration
-public class FeignKakaoConfiguration {
+public class FeignConfiguration {
 
     @Bean
     public Client feignClient() {
         return new Client.Default(null, null);
     }
-}
 
+}

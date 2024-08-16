@@ -24,25 +24,13 @@ public class AuthKakaoService implements AuthPlatformService{
     @Value("${spring.kakao.redirectUrl}")
     private String redirectUrl;
 
-    public Optional<PlatformUser> tryLogin(String code) {
-        KakaoTokenInfoResponse kakaoTokenInfoResponse = getInfo(code);
-        if(kakaoTokenInfoResponse != null){
-            login(kakaoTokenInfoResponse.getId());
-        }
-        try {
-            return kakaoLoginRepository.findById(token.getKakaoId);
-        } catch (Exception e) {
-            throw new CommonException();
-        }
+    private void tryLogin(){
+        client.tryLoginRequest();
     }
 
-    private PlatformUser login(String id){
-
-    }
-
-    private PlatformUser registUser(String id, int userNo) {
+    private KakaoUser registUser(long id, long userId) {
         try {
-            KakaoUser kakaoUser = KakaoUser.createInstance(id, userNo);
+            KakaoUser kakaoUser = KakaoUser.createInstance(id, userId);
             return kakaoLoginRepository.save(kakaoUser);
         } catch (Exception e) {
             throw new CommonException();
