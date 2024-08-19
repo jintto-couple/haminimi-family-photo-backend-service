@@ -30,7 +30,8 @@ public class AuthUserService {
 
 
     public void loginRequest(AuthPlatform platform){
-        provider.getAdapter(platform).loginRequest();
+        provider.getAdapter(platform)
+                .loginRequest();
     }
 
     public LoginTokenResponse getLoginToken(AuthPlatform platform, String code){
@@ -45,26 +46,22 @@ public class AuthUserService {
     }
 
     private String getToken(AuthPlatform platform, String code){
-        PlatformAction<String> action = fetchPlatformAction(platform,
-                () -> authKakaoAdapter.getAccessToken(code));
-        return action.run();
+        return  provider.getAdapter(platform)
+                .getAccessToken(code);
     }
 
     private PlatformUser getInfo(AuthPlatform platform, String token){
-        return provider
-                .getAdapter(platform)
+        return provider.getAdapter(platform)
                 .getInfo(token);
     }
 
     private User getUser(AuthPlatform platform, PlatformUser user){
-        long userId = provider
-                .getAdapter(platform)
+        long userId = provider.getAdapter(platform)
                 .searchUserIdById(user.getId());
         if(userId == -1){
             return registUser(platform, user);
         } else {
-            return userRepository
-                    .findById(userId)
+            return userRepository.findById(userId)
                     .orElseThrow(CommonException::new);
         }
     }
@@ -72,7 +69,8 @@ public class AuthUserService {
     private User registUser(AuthPlatform platform, PlatformUser user) {
         User newUser = User.createInstance(platform.getRegistration());
         userInformationAdapter.registUser(newUser.getUserId(), user.getUserName());
-        provider.getAdapter(platform).registUser(user.getId(), newUser.getUserId());
+        provider.getAdapter(platform)
+                .registUser(user.getId(), newUser.getUserId());
         return newUser;
     }
 
