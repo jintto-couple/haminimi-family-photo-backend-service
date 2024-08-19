@@ -1,14 +1,11 @@
 package com.haminime.photo.domain.entity;
 
-import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
-@Setter(AccessLevel.PRIVATE)
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class PlatformUser {
-    private int userNo;
+    private String id;
+    private String userName;
 }

@@ -1,6 +1,7 @@
 package com.haminime.photo.adapter;
 
 import com.haminime.photo.domain.entity.KakaoUser;
+import com.haminime.photo.domain.entity.PlatformUser;
 import com.haminime.photo.service.AuthKakaoService;
 import org.springframework.stereotype.Component;
 
@@ -10,27 +11,30 @@ public class AuthKakaoAdapterImpl implements AuthKakaoAdapter {
     private AuthKakaoService authKakaoService;
 
     @Override
-    public void loginRequest() {
+    public Void loginRequest() {
         authKakaoService.tryLogin();
+        return null;
     }
 
     @Override
-    public long searchUser(long id) {
-        return authKakaoService.searchUser(id);
+    public String getAccessToken(String code) {
+        return authKakaoService.getToken(code);
     }
 
     @Override
-    public KakaoUser getUser(long userId) {
-        return authKakaoService.getUser(userId);
+    public PlatformUser getInfo(String accessToken) {
+        return authKakaoService.getInfo(accessToken);
     }
 
     @Override
-    public void registUser(long id, long userId) {
-        authKakaoService.registUser(id, userId);
+    public long searchUserIdById(String id) {
+        return authKakaoService.searchUser(Long.parseLong(id));
     }
 
     @Override
-    public void deleteUser(long id) {
-        authKakaoService.deleteKakaoUser(id);
+    public Void registUser(String id, long userId) {
+        authKakaoService.registUser(Long.parseLong(id), userId);
+        return null;
     }
+
 }

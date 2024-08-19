@@ -19,7 +19,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userNo;
+    private long userId;
     private int userPlatform;
 
     public static User createInstance(int userPlatform) {

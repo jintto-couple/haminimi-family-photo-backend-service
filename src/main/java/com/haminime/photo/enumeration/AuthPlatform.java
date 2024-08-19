@@ -1,8 +1,13 @@
 package com.haminime.photo.enumeration;
 
-public enum AuthPlatform {
-    kakao("kakao");
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    private String registration;
+@Getter
+@RequiredArgsConstructor
+public enum AuthPlatform {
+    kakao(1);
+
+    private final int registration;
 
 }

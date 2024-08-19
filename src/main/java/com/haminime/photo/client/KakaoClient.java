@@ -1,5 +1,6 @@
 package com.haminime.photo.client;
 
+import com.haminime.photo.config.FeignConfiguration;
 import com.haminime.photo.controller.dto.response.KakaoTokenInfoResponse;
 import com.haminime.photo.controller.dto.response.KakaoTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,18 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "kakaoClient", configuration = KakaoFeignConfiguration.class)
+import java.util.Map;
+
+@FeignClient(name = "kakaoClient", configuration = FeignConfiguration.class)
 public interface KakaoClient {
 
-    @RequestMapping(method = RequestMethod.POST, value = "https://kauth.kakao.com/oauth/authorize")
+    @RequestMapping(method = RequestMethod.GET, value = "https://kauth.kakao.com/oauth/authorize")
     void tryLoginRequest();
 
     @RequestMapping(method = RequestMethod.POST, value = "https://kauth.kakao.com/oauth/token")
-    KakaoTokenResponse getToken(@RequestParam("client_id") String restApiKey,
-                                @RequestParam("redirect_uri") String redirectUrl,
-                                @RequestParam("code") String code,
-                                @RequestParam("grant_type") String grantType);
+    Map<String, Object> getToken(@RequestParam("client_id") String restApiKey,
+                                 @RequestParam("redirect_uri") String redirectUrl,
+                                 @RequestParam("code") String code,
+                                 @RequestParam("grant_type") String grantType);
 
     @RequestMapping(method = RequestMethod.POST, value = "https://kapi.kakao.com/v2/user/me")
-    KakaoTokenInfoResponse getInfo(@RequestHeader("Authorization") String accessToken);
+    Map<String, Object> getInfo(@RequestHeader("Authorization") String accessToken,
+                                @RequestHeader("Content-type") String contentType);
 }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class KakaoUser extends PlatformUser {
+public class KakaoUser {
 
     @Id
     private long kakaoId;

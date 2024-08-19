@@ -1,11 +1,12 @@
 package com.haminime.photo.adapter;
 
 import com.haminime.photo.domain.entity.KakaoUser;
+import com.haminime.photo.domain.entity.PlatformUser;
 
 public interface AuthKakaoAdapter {
-    void loginRequest();
-    long searchUser(long id);
-    KakaoUser getUser(long userId);
-    void registUser(long id, long userId);
-    void deleteUser(long userId);
+    Void loginRequest();
+    String getAccessToken(String code);
+    PlatformUser getInfo(String accessToken);
+    long searchUserIdById(String id);
+    Void registUser(String id, long userId);
 }

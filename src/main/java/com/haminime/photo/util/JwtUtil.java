@@ -21,15 +21,17 @@ public class JwtUtil {
             .encodeToString(key.getBytes(StandardCharsets.UTF_8))
             .getBytes(StandardCharsets.UTF_8));
 
-    public String createToken(Map<String, Object> tokenData) {
+    public String createToken(long id) {
         Date exp = new Date(System.currentTimeMillis() + 1000 * 60 * 60); // 1시간
-        JwtBuilder builder = Jwts.builder().header().add("typ", "JWT").and();
-        for(String key : tokenData.keySet()){
-            builder.claim(key, tokenData.get(key));
-        }
-        String token = builder.expiration(exp).signWith(secretKey).compact();
+        return Jwts.builder()
+                .header()
+                .add("typ", "JWT")
+                .and()
+                .claim("id", id)
+                .expiration(exp)
+                .signWith(secretKey)
+                .compact();
 
-        return token;
     }
 
     public Jws<Claims> validate(String token) {
