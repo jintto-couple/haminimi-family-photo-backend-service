@@ -1,8 +1,6 @@
 package com.haminime.photo.client;
 
 import com.haminime.photo.config.FeignConfiguration;
-import com.haminime.photo.controller.dto.response.KakaoTokenInfoResponse;
-import com.haminime.photo.controller.dto.response.KakaoTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;

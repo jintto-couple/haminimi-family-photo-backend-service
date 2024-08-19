@@ -2,11 +2,9 @@ package com.haminime.photo.service;
 
 import com.haminime.photo.client.KakaoClient;
 import com.haminime.photo.common.CommonException;
-import com.haminime.photo.controller.dto.response.KakaoTokenInfoResponse;
-import com.haminime.photo.controller.dto.response.KakaoTokenResponse;
 import com.haminime.photo.domain.entity.KakaoUser;
 import com.haminime.photo.domain.entity.PlatformUser;
-import com.haminime.photo.repository.KakaoLoginRepository;
+import com.haminime.photo.repository.KakaoUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +18,7 @@ import java.util.Map;
 public class AuthKakaoService {
 
     private final KakaoClient client;
-    private final KakaoLoginRepository kakaoLoginRepository;
+    private final KakaoUserRepository kakaoUserRepository;
 
     @Value("${oauth.kakao.restapiKey}")
     private String restapiKey;
@@ -52,12 +50,12 @@ public class AuthKakaoService {
     }
 
     public long searchUser(long id) {
-        return kakaoLoginRepository.findById(id).map(KakaoUser::getUserId).orElse(-1L);
+        return kakaoUserRepository.findById(id).map(KakaoUser::getUserId).orElse(-1L);
     }
 
     public void registUser(long id, long userId) {
         KakaoUser kakaoUser = KakaoUser.createInstance(id, userId);
-        kakaoLoginRepository.save(kakaoUser);
+        kakaoUserRepository.save(kakaoUser);
     }
 
 

@@ -23,5 +23,6 @@ public class CustomAuthenticationFilter implements Filter {
             return;
         }
         //TO-DO 유저 객체 만들어서 넘기기
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

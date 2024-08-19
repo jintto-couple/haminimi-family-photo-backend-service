@@ -3,6 +3,7 @@ package com.haminime.photo.service;
 import com.haminime.photo.adapter.AuthKakaoAdapter;
 import com.haminime.photo.adapter.UserInformationAdapter;
 import com.haminime.photo.common.CommonException;
+import com.haminime.photo.controller.dto.response.AccessTokenResponse;
 import com.haminime.photo.controller.dto.response.LoginTokenResponse;
 import com.haminime.photo.domain.entity.PlatformUser;
 import com.haminime.photo.domain.entity.User;
@@ -86,6 +87,10 @@ public class AuthUserService {
         String accessToken = jwtUtil.createToken(user.getUserId());
 //        String refreshToken =
         return new LoginTokenResponse(accessToken, "RefreshToken");
+    }
+
+    public AccessTokenResponse reissueTokenByRefreshToken(String refreshToken){
+        return new AccessTokenResponse("Reissued AccessToken");
     }
 
 }
