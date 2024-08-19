@@ -1,6 +1,8 @@
 package com.haminime.photo.service;
 
+import com.haminime.photo.adapter.AdapterProvider;
 import com.haminime.photo.adapter.AuthKakaoAdapter;
+import com.haminime.photo.adapter.AuthPlatformAdapter;
 import com.haminime.photo.adapter.UserInformationAdapter;
 import com.haminime.photo.common.CommonException;
 import com.haminime.photo.controller.dto.response.AccessTokenResponse;
@@ -12,32 +14,23 @@ import com.haminime.photo.repository.UserRepository;
 import com.haminime.photo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.core.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class AuthUserService {
-    private final AuthKakaoAdapter authKakaoAdapter;
+    private final AdapterProvider provider;
     private final UserInformationAdapter userInformationAdapter;
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    private <T> PlatformAction<T> fetchPlatformAction(AuthPlatform platform, PlatformAction<T> kakao) {
-        return switch (platform) {
-            case kakao -> kakao;
-            default -> {
-                log.error("Platform not supported: {}", platform);
-                throw new CommonException();
-            }
-        };
-    }
 
     public void loginRequest(AuthPlatform platform){
-        PlatformAction<Void> action = fetchPlatformAction(platform,
-                authKakaoAdapter::loginRequest);
-        action.run();
+        provider.getAdapter(platform).loginRequest();
     }
 
     public LoginTokenResponse getLoginToken(AuthPlatform platform, String code){
@@ -58,28 +51,28 @@ public class AuthUserService {
     }
 
     private PlatformUser getInfo(AuthPlatform platform, String token){
-        PlatformAction<PlatformUser> action = fetchPlatformAction(platform,
-                () -> authKakaoAdapter.getInfo(token));
-        return action.run();
+        return provider
+                .getAdapter(platform)
+                .getInfo(token);
     }
 
     private User getUser(AuthPlatform platform, PlatformUser user){
-        PlatformAction<Long> action = fetchPlatformAction(platform,
-                () -> authKakaoAdapter.searchUserIdById(user.getId()));
-        long userId = action.run();
+        long userId = provider
+                .getAdapter(platform)
+                .searchUserIdById(user.getId());
         if(userId == -1){
             return registUser(platform, user);
         } else {
-            return userRepository.findById(userId).orElseThrow(CommonException::new);
+            return userRepository
+                    .findById(userId)
+                    .orElseThrow(CommonException::new);
         }
     }
 
     private User registUser(AuthPlatform platform, PlatformUser user) {
         User newUser = User.createInstance(platform.getRegistration());
         userInformationAdapter.registUser(newUser.getUserId(), user.getUserName());
-        PlatformAction<Void> action = fetchPlatformAction(platform,
-                () -> authKakaoAdapter.registUser(user.getId(), newUser.getUserId()));
-        action.run();
+        provider.getAdapter(platform).registUser(user.getId(), newUser.getUserId());
         return newUser;
     }
 
@@ -93,9 +86,4 @@ public class AuthUserService {
         return new AccessTokenResponse("Reissued AccessToken");
     }
 
-}
-
-@FunctionalInterface
-interface PlatformAction<T> {
-    T run();
 }

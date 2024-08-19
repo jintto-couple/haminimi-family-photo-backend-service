@@ -11,9 +11,8 @@ public class AuthKakaoAdapterImpl implements AuthKakaoAdapter {
     private AuthKakaoService authKakaoService;
 
     @Override
-    public Void loginRequest() {
+    public void loginRequest() {
         authKakaoService.tryLogin();
-        return null;
     }
 
     @Override
@@ -32,9 +31,8 @@ public class AuthKakaoAdapterImpl implements AuthKakaoAdapter {
     }
 
     @Override
-    public Void registUser(String id, long userId) {
+    public void registUser(String id, long userId) {
         authKakaoService.registUser(Long.parseLong(id), userId);
-        return null;
     }
 
 }
