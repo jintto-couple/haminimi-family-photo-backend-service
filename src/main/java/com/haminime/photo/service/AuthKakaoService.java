@@ -1,13 +1,18 @@
 package com.haminime.photo.service;
 
-import com.haminime.photo.client.KakaoClient;
+import com.haminime.photo.client.KakaoApiClient;
+import com.haminime.photo.client.KakaoAuthClient;
 import com.haminime.photo.common.CommonException;
 import com.haminime.photo.domain.entity.KakaoUser;
 import com.haminime.photo.domain.entity.PlatformUser;
 import com.haminime.photo.repository.KakaoUserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -17,21 +22,25 @@ import java.util.Map;
 @Slf4j
 public class AuthKakaoService {
 
-    private final KakaoClient client;
+    private final KakaoAuthClient authClient;
+    private final KakaoApiClient apiClient;
     private final KakaoUserRepository kakaoUserRepository;
 
-    @Value("${oauth.kakao.restapiKey}")
+    @Autowired
+    private Environment env;
+
+    @Value("${oauth.kakao.rest_api_key}")
     private String restapiKey;
     @Value("${domain}")
     private String domain;
-    private String callback = "/oauth2/callback/login/kakao";
 
     public void tryLogin(){
-        client.tryLoginRequest();
+        authClient.tryLoginRequest();
     }
 
     public String getToken(String code) {
-        Map<String, Object> tokenData = client.getToken(restapiKey, domain + callback, code, "authorization_code");
+        String callback = "/oauth2/callback/login/kakao";
+        Map<String, Object> tokenData = authClient.getToken(restapiKey, domain + callback, code, "authorization_code");
         if(tokenData.containsKey("access_token")){
             return tokenData.get("access_token").toString();
         }
@@ -39,7 +48,7 @@ public class AuthKakaoService {
     }
 
     public PlatformUser getInfo(String token){
-        Map<String, Object> tokenData = client.getInfo("Bearer " + token, "application/x-www-form-urlencoded;charset=utf-8");
+        Map<String, Object> tokenData = apiClient.getInfo("Bearer " + token, "application/x-www-form-urlencoded;charset=utf-8");
         if(tokenData.containsKey("kakao_account")){
             Map<String, Object> kakaoAccount = (Map<String, Object>) tokenData.get("kakao_account");
             Map<String, Object> userInfo = (Map<String, Object>) kakaoAccount.get("profile");

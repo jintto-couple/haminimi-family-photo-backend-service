@@ -9,7 +9,7 @@ spring:
   datasource:
     driverClassName: org.h2.Driver
     #url: 'jdbc:h2:mem:test'
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
     username: admin
     password:
   h2:
@@ -22,12 +22,19 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+#        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
         show_sql: true
 
 oauth:
   kakao:
-    restapiKey: ${HAMINIMI_KAKAO_KEY}
+    rest_api_key: ${hamin_kakao_key}
+    url:
+      kauth: https://kauth.kakao.com/oauth
+      kapi: https://kapi.kakao.com
 
 domain: "http://localhost:8080"
+
+profile:
+  default-url: ""

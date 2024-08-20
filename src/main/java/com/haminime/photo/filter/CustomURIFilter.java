@@ -5,10 +5,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Component
+@Slf4j
 public class CustomURIFilter extends OncePerRequestFilter{
 
     @Override
@@ -16,7 +20,7 @@ public class CustomURIFilter extends OncePerRequestFilter{
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-
+        log.info("request path = {}", path);
         if (path.startsWith("/api/oauth2")) {
             String newPath = path.substring(4);
 

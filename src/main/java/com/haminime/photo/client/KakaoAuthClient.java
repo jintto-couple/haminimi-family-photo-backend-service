@@ -9,19 +9,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-@FeignClient(name = "kakaoClient", configuration = FeignConfiguration.class)
-public interface KakaoClient {
+@FeignClient(name = "kakaoAuthClient", url = "${oauth.kakao.url.kauth}", configuration = FeignConfiguration.class)
+public interface KakaoAuthClient {
 
-    @RequestMapping(method = RequestMethod.GET, value = "https://kauth.kakao.com/oauth/authorize")
+    @RequestMapping(method = RequestMethod.GET, value = "/authorize")
     void tryLoginRequest();
 
-    @RequestMapping(method = RequestMethod.POST, value = "https://kauth.kakao.com/oauth/token")
+    @RequestMapping(method = RequestMethod.POST, value = "/token")
     Map<String, Object> getToken(@RequestParam("client_id") String restApiKey,
                                  @RequestParam("redirect_uri") String redirectUrl,
                                  @RequestParam("code") String code,
                                  @RequestParam("grant_type") String grantType);
 
-    @RequestMapping(method = RequestMethod.POST, value = "https://kapi.kakao.com/v2/user/me")
-    Map<String, Object> getInfo(@RequestHeader("Authorization") String accessToken,
-                                @RequestHeader("Content-type") String contentType);
 }

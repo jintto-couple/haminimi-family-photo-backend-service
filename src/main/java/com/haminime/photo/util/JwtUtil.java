@@ -1,5 +1,6 @@
 package com.haminime.photo.util;
 
+import com.haminime.photo.service.dto.UserAuthentication;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
@@ -38,4 +39,9 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
     }
 
+    public UserAuthentication validAndGetUser(String token) {
+        Jws<Claims> claims = validate(token);
+        Map<String, Object> claimsMap = claims.getBody();
+        return new UserAuthentication(Long.parseLong(claimsMap.get("id").toString()));
+    }
 }
