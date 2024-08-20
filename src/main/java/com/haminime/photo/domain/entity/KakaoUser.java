@@ -7,7 +7,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter(AccessLevel.PRIVATE)
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

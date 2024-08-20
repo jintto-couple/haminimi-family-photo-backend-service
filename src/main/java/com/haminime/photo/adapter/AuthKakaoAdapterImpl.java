@@ -1,7 +1,6 @@
 package com.haminime.photo.adapter;
 
-import com.haminime.photo.domain.entity.KakaoUser;
-import com.haminime.photo.domain.entity.PlatformUser;
+import com.haminime.photo.service.dto.PlatformUser;
 import com.haminime.photo.service.AuthKakaoService;
 import org.springframework.stereotype.Component;
 

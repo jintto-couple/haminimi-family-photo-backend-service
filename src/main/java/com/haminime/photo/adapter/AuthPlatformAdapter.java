@@ -1,6 +1,6 @@
 package com.haminime.photo.adapter;
 
-import com.haminime.photo.domain.entity.PlatformUser;
+import com.haminime.photo.service.dto.PlatformUser;
 
 public interface AuthPlatformAdapter {
     void loginRequest();

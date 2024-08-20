@@ -2,13 +2,17 @@ package com.haminime.photo.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.Builder;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserInformation {
 
     @Id

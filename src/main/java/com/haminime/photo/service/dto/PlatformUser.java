@@ -1,4 +1,4 @@
-package com.haminime.photo.domain.entity;
+package com.haminime.photo.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

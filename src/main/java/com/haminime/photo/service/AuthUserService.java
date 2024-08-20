@@ -1,21 +1,17 @@
 package com.haminime.photo.service;
 
 import com.haminime.photo.adapter.AdapterProvider;
-import com.haminime.photo.adapter.AuthKakaoAdapter;
-import com.haminime.photo.adapter.AuthPlatformAdapter;
 import com.haminime.photo.adapter.UserInformationAdapter;
 import com.haminime.photo.common.CommonException;
 import com.haminime.photo.controller.dto.response.AccessTokenResponse;
 import com.haminime.photo.controller.dto.response.LoginTokenResponse;
-import com.haminime.photo.domain.entity.PlatformUser;
+import com.haminime.photo.service.dto.PlatformUser;
 import com.haminime.photo.domain.entity.User;
 import com.haminime.photo.enumeration.AuthPlatform;
 import com.haminime.photo.repository.UserRepository;
 import com.haminime.photo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.core.ApplicationContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -42,7 +38,7 @@ public class AuthUserService {
     private User getLoginUser(AuthPlatform platform, String code){
         String token = getToken(platform, code);
         PlatformUser user = getInfo(platform, token);
-        return getUser(platform, user);
+        return searchUser(platform, user);
     }
 
     private String getToken(AuthPlatform platform, String code){
@@ -55,7 +51,7 @@ public class AuthUserService {
                 .getInfo(token);
     }
 
-    private User getUser(AuthPlatform platform, PlatformUser user){
+    private User searchUser(AuthPlatform platform, PlatformUser user){
         long userId = provider.getAdapter(platform)
                 .searchUserIdById(user.getId());
         if(userId == -1){

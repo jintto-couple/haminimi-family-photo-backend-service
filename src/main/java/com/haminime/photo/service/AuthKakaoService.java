@@ -4,14 +4,12 @@ import com.haminime.photo.client.KakaoApiClient;
 import com.haminime.photo.client.KakaoAuthClient;
 import com.haminime.photo.common.CommonException;
 import com.haminime.photo.domain.entity.KakaoUser;
-import com.haminime.photo.domain.entity.PlatformUser;
+import com.haminime.photo.service.dto.PlatformUser;
 import com.haminime.photo.repository.KakaoUserRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
