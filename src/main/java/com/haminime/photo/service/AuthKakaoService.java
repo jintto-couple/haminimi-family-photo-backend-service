@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -24,21 +27,23 @@ public class AuthKakaoService {
     private final KakaoApiClient apiClient;
     private final KakaoUserRepository kakaoUserRepository;
 
-    @Autowired
-    private Environment env;
-
     @Value("${oauth.kakao.rest_api_key}")
     private String restapiKey;
     @Value("${domain}")
     private String domain;
+    @Value("${oauth.kakao.url.kauth}")
+    private String defaultURL;
+    private final String contentType = "application/x-www-form-urlencoded;charset=utf-8";
 
-    public void tryLogin(){
-        authClient.tryLoginRequest();
+    public String fetchLoginURL(){
+        String callback = "/api/oauth2/callback/login/kakao";
+        String redirect = domain + callback;
+        return defaultURL + "/authorize?response_type=code&client_id=" + restapiKey + "&redirect_uri=" + redirect;
     }
 
     public String getToken(String code) {
-        String callback = "/oauth2/callback/login/kakao";
-        Map<String, Object> tokenData = authClient.getToken(restapiKey, domain + callback, code, "authorization_code");
+        String callback = "/api/oauth2/callback/login/kakao";
+        Map<String, Object> tokenData = authClient.getToken(contentType, restapiKey, domain + callback, code, "authorization_code");
         if(tokenData.containsKey("access_token")){
             return tokenData.get("access_token").toString();
         }
@@ -46,7 +51,7 @@ public class AuthKakaoService {
     }
 
     public PlatformUser getInfo(String token){
-        Map<String, Object> tokenData = apiClient.getInfo("Bearer " + token, "application/x-www-form-urlencoded;charset=utf-8");
+        Map<String, Object> tokenData = apiClient.getInfo("Bearer " + token, contentType);
         if(tokenData.containsKey("kakao_account")){
             Map<String, Object> kakaoAccount = (Map<String, Object>) tokenData.get("kakao_account");
             Map<String, Object> userInfo = (Map<String, Object>) kakaoAccount.get("profile");
@@ -60,7 +65,7 @@ public class AuthKakaoService {
         return kakaoUserRepository.findById(id).map(KakaoUser::getUserId).orElse(-1L);
     }
 
-    public void registUser(long id, long userId) {
+    public void createUser(long id, long userId) {
         KakaoUser kakaoUser = KakaoUser.createInstance(id, userId);
         kakaoUserRepository.save(kakaoUser);
     }

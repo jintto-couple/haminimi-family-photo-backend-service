@@ -21,6 +21,10 @@ public class CustomURIFilter extends OncePerRequestFilter{
 
         String path = request.getRequestURI();
         log.info("request path = {}", path);
+        if(path.startsWith("/favicon.ico")){
+            return;
+        }
+
         if (path.startsWith("/api/oauth2")) {
             String newPath = path.substring(4);
 
@@ -35,7 +39,7 @@ public class CustomURIFilter extends OncePerRequestFilter{
                     return newPath;
                 }
             };
-
+            log.info("request servlet new path = {}", requestWrapper.getRequestURI());
             chain.doFilter(requestWrapper, response);
             return;
         }

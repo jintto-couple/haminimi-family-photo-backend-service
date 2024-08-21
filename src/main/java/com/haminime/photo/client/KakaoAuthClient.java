@@ -12,11 +12,9 @@ import java.util.Map;
 @FeignClient(name = "kakaoAuthClient", url = "${oauth.kakao.url.kauth}", configuration = FeignConfiguration.class)
 public interface KakaoAuthClient {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/authorize")
-    void tryLoginRequest();
-
     @RequestMapping(method = RequestMethod.POST, value = "/token")
-    Map<String, Object> getToken(@RequestParam("client_id") String restApiKey,
+    Map<String, Object> getToken(@RequestHeader("Content-type") String contentType,
+                                 @RequestParam("client_id") String restApiKey,
                                  @RequestParam("redirect_uri") String redirectUrl,
                                  @RequestParam("code") String code,
                                  @RequestParam("grant_type") String grantType);

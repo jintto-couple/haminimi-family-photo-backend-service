@@ -2,16 +2,18 @@ package com.haminime.photo.adapter;
 
 import com.haminime.photo.service.dto.PlatformUser;
 import com.haminime.photo.service.AuthKakaoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class AuthKakaoAdapterImpl implements AuthKakaoAdapter {
 
-    private AuthKakaoService authKakaoService;
+    private final AuthKakaoService authKakaoService;
 
     @Override
-    public void loginRequest() {
-        authKakaoService.tryLogin();
+    public String loginRequest() {
+        return authKakaoService.fetchLoginURL();
     }
 
     @Override
@@ -30,8 +32,8 @@ public class AuthKakaoAdapterImpl implements AuthKakaoAdapter {
     }
 
     @Override
-    public void registUser(String id, long userId) {
-        authKakaoService.registUser(Long.parseLong(id), userId);
+    public void createUser(String id, long userId) {
+        authKakaoService.createUser(Long.parseLong(id), userId);
     }
 
 }

@@ -25,8 +25,8 @@ public class AuthUserService {
     private final JwtUtil jwtUtil;
 
 
-    public void loginRequest(AuthPlatform platform){
-        provider.getAdapter(platform)
+    public String loginRequest(AuthPlatform platform){
+        return provider.getAdapter(platform)
                 .loginRequest();
     }
 
@@ -64,9 +64,9 @@ public class AuthUserService {
 
     private User registUser(AuthPlatform platform, PlatformUser user) {
         User newUser = User.createInstance(platform.getRegistration());
-        userInformationAdapter.registUser(newUser.getUserId(), user.getUserName());
+        userInformationAdapter.createUser(newUser.getUserId(), user.getUserName());
         provider.getAdapter(platform)
-                .registUser(user.getId(), newUser.getUserId());
+                .createUser(user.getId(), newUser.getUserId());
         return newUser;
     }
 
