@@ -1,6 +1,7 @@
 package com.haminime.photo.controller;
 
 import com.haminime.photo.controller.dto.response.AccessTokenResponse;
+import com.haminime.photo.controller.dto.response.LoginTokenResponse;
 import com.haminime.photo.enumeration.AuthPlatform;
 import com.haminime.photo.service.AuthUserService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class AuthLoginController {
     }
 
     @GetMapping("/reissue")
-    public AccessTokenResponse reissueAccessToken(String refreshToken) {
+    public LoginTokenResponse reissueAccessToken(String refreshToken) {
         return authUserService.reissueTokenByRefreshToken(refreshToken);
     }
 }

@@ -10,9 +10,12 @@ import com.haminime.photo.domain.entity.User;
 import com.haminime.photo.enumeration.AuthPlatform;
 import com.haminime.photo.repository.UserRepository;
 import com.haminime.photo.util.JwtUtil;
+import com.haminime.photo.util.RefreshTokenRedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +26,7 @@ public class AuthUserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenRedisUtil refreshTokenRedisUtil;
 
 
     public String loginRequest(AuthPlatform platform){
@@ -72,12 +76,22 @@ public class AuthUserService {
 
     private LoginTokenResponse makeToken(User user) {
         String accessToken = jwtUtil.createToken(user.getUserId());
-//        String refreshToken =
-        return new LoginTokenResponse(accessToken, "RefreshToken");
+        String refreshToken = refreshTokenRedisUtil.save(user.getUserId());
+        return new LoginTokenResponse(accessToken, refreshToken);
     }
 
-    public AccessTokenResponse reissueTokenByRefreshToken(String refreshToken){
-        return new AccessTokenResponse("Reissued AccessToken");
+    public LoginTokenResponse reissueTokenByRefreshToken(String refreshToken){
+        long exp = refreshTokenRedisUtil.checkExpire(refreshToken);
+        if(exp <= 0) {
+            throw new CommonException();
+        }
+        long id = refreshTokenRedisUtil.searchValueByKey(refreshToken);
+        String accessToken = jwtUtil.createToken(id);
+        if(exp > TimeUnit.DAYS.toSeconds(7)) {
+            return new LoginTokenResponse(accessToken, refreshToken);
+        }
+        String newRefreshToken = refreshTokenRedisUtil.createNewDataByKey(refreshToken);
+        return new LoginTokenResponse(accessToken, newRefreshToken);
     }
 
 }
